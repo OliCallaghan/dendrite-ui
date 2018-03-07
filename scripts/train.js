@@ -183,20 +183,20 @@ function verifyValidNetwork(order) {
 }
 
 //
-// StringifyArray(ARRAY) : Generates string of elements in array, with ',' as a delimiter (and no whitespace)
+// StringifyArray(ARRAY, ORDER) : Generates string of connections/dependents in array with new execution order indices, with ',' as a delimiter (and no whitespace)
 //
-function StringifyArray(arr) {
+function StringifyArray(arr, order) {
 	var str = "";
 	for (elem in arr) {
-		str += arr[elem] + ","
+		str += order.indexOf(arr[elem]) + ","
 	}
 	return str.slice(0,-1);
 }
 
 //
-// PackageAsString(INDEX, NODE, LAST_NODE) : Packages the node as a string with ID and returns it for writing to model.struct
+// PackageAsString(INDEX, NODE, LAST_NODE, ORDER) : Packages the node as a string with ID and returns it for writing to model.struct
 //
-function PackageAsString(index, node, last_node) {
+function PackageAsString(index, node, last_node, order) {
 	switch (node.t) {
 		case "IN":
 			// INPUT layer
@@ -209,10 +209,10 @@ function PackageAsString(index, node, last_node) {
 		default:
 			// Any other layer type
 			if (!last_node) {
-				return `<lay t=${node.t} id=${index} i=${StringifyArray(node.dependents)} d=${StringifyArray(node.connections)}>\n`;
+				return `<lay t=${node.t} id=${index} i=${StringifyArray(node.dependents, order)} d=${StringifyArray(node.connections, order)}>\n`;
 			} else {
 				// Final layer must be dependent on itself
-				return `<lay t=${node.t} id=${index} i=${StringifyArray(node.dependents)} d=${index}>\n`;
+				return `<lay t=${node.t} id=${index} i=${StringifyArray(node.dependents, order)} d=${index}>\n`;
 			}
 	}
 }
@@ -289,17 +289,16 @@ function WritePipeline(location, pipeline) {
 
 //
 // CreateHyperparameters(EXECUTION ORDER, LOCATION) : For each node in the graph, create its hyperparameters
-// IMPORTANT RETURN : exec_str = FC ${node} or exec_str = FC ${order[node]} ???
 //
 function CreateHyperparameters(order, loc) {
 	for (node in order) {
 		let exec_str = undefined;
 		switch (nodes[order[node]].t) {
 			case "FC":
-				exec_str = `FC ${order[node]} nodes=${nodes[order[node]].Nodes} mean=${nodes[order[node]].Mean} stddev=${nodes[order[node]].Deviation}`
+				exec_str = `FC ${node} nodes=${nodes[order[node]].Nodes} mean=${nodes[order[node]].Mean} stddev=${nodes[order[node]].Deviation}`
 				break;
 			case "BIAS":
-				exec_str = `B ${order[node]} mean=${nodes[order[node]].Mean} stddev=${nodes[order[node]].Deviation}`
+				exec_str = `B ${node} mean=${nodes[order[node]].Mean} stddev=${nodes[order[node]].Deviation}`
 				break;
 			default:
 				console.log("No hyperparameters to be generated");
@@ -328,8 +327,10 @@ function packageToNetworkSave() {
 	// Get data to write to model.struct
 	//
 	let model_arr = [];
+	console.log(order);
+	debugger;
 	for (node in order) {
-		model_arr.push(PackageAsString(node, nodes[order[node]], order.length - 2 == node));
+		model_arr.push(PackageAsString(node, nodes[order[node]], order.length - 2 == node, order));
 	}
 	WriteModelStruct(model_arr, file_location);
 
