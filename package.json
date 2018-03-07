@@ -1,0 +1,15 @@
+{
+  "name": "dendrite-ui",
+  "version": "1.0.0",
+  "description": "Tool to design and assemble neural network structures to be trained and executed using Dendrite",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oli Callaghan",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^1.8.2"
+  }
+}

@@ -1,0 +1,195 @@
+body {
+	font-family: 'Inconsolata', monospace;
+}
+
+#sidebar-toolbar {
+	background: #F25A38;
+}
+
+#sidebar-filename-container {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 250px;
+	background: #F69079;
+}
+
+#sidebar-filename {
+	position: relative;
+	margin:0;
+	padding: 0;
+	width: 250px;
+	left: 50%;
+	top:50%;
+	color: #fff;
+	transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+	line-height: 6.25vw;
+	text-align: center;
+}
+
+#sidebar-toolbar .action {
+	position: relative;
+	height: 30px;
+	width: 100%;
+	cursor: pointer;
+	color: #fff;
+	line-height: 30px;
+	text-align: center;
+	margin-top: 5px;
+	transition: background 0.2s;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#sidebar-toolbar .action:hover {
+	background: #F69079;
+}
+
+#sidebar-toolbar #new {
+	margin-top: 15px;
+}
+
+#graph {
+	background: #F2EAE4;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#graph-toolbar {
+	background: #7B878C;
+}
+
+#graph-toolbar .action {
+	position: relative;
+	float: left;
+	width: 50%;
+	height: 30px;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	line-height: 30px;
+	color: #fff;
+	transition: background 0.2s, color 0.2s;
+	cursor: pointer;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#graph-toolbar .action:hover {
+	background: #fff;
+	color: #7B878C;
+}
+
+#loss-graph {
+	background: #7B878C;
+}
+
+#actionbar {
+	background: #F25A38;
+}
+
+#actionbar .action {
+	position: relative;
+	float: left;
+	width: 75px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	color: #fff;
+	margin-right: 5px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+#actionbar .action:hover {
+	background: #F69079;
+}
+
+#properties-view {
+	background: #F2EAE4;
+	border-left: 1px solid #F25A38;
+	border-right: 1px solid #F25A38;
+}
+
+#inspect-view {
+	background: #F2EAE4;
+}
+
+#inspect-view-status {
+	background: #F25A38;
+	color: #fff;
+	line-height: 30px;
+	padding-left: 7px;
+}
+
+#properties-view h1 {
+	color: #F25A38;
+}
+
+#properties-view h2 {
+	color: #F25A38;
+}
+
+.property span {
+	color: #7B878C;
+}
+
+.property input {
+	background: none;
+	border: none;
+	outline: none;
+	font-size: 16px;
+	font-family: 'Inconsolata', monospace;
+	color: #F25A38;
+}
+
+.connection_property {
+	color: #7B878C;
+}
+
+.connection_del {
+	cursor: pointer;
+	font-size: 24px;
+	transition: background 0.2s;
+	color: #7B878C;
+}
+
+.connection_del:hover {
+	background: #D9C9BA;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#properties-view {
+	overflow-y: scroll;
+}
+
+#connections-list, #properties-list {
+	text-align: center;
+	line-height: 30px;
+	color: #7B878C;
+}
+
+.instruction {
+	color: #7B878C;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.instr_edit {
+	cursor: move;
+}
+
+.instruction input {
+	-webkit-user-select: text;
+	user-select: text;
+}
+
+.emptylist {
+	width: calc(100% - 10px);
+}

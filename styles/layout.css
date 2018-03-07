@@ -1,0 +1,630 @@
+body {
+	overflow: hidden;
+}
+
+#sidebar-toolbar {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 6.25%;
+	height: 100%;
+	float: left;
+}
+
+#graph {
+	position: absolute;
+	top: 0;
+	left: 6.25%;
+	width: 26%;
+	bottom: 30px;
+	float: left;
+	overflow-x:hidden;
+}
+
+#connections {
+	position: absolute;
+	width: 400px;
+	padding: 0;
+	margin: 0;
+	height: 2000px;
+	right: calc(50% - 200px);
+}
+
+#graph-toolbar {
+	position: absolute;
+	bottom: 0;
+	left: 6.25%;
+	width: 26%;
+	height: 30px;
+}
+
+#loss-graph {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 67.75%;
+	height: 220px;
+}
+
+#loss-graph-canvas {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0;
+	margin: 0;
+	width: 400px;
+	height: 220px;
+}
+
+#actionbar {
+	position: absolute;
+	top: 220px;
+	height: 30px;
+	width: 67.75%;
+	right: 0;
+}
+
+/* PROPERTIES */
+#properties-view {
+	position: absolute;
+	top: 250px;
+	bottom: 0;
+	right: 33.875%;
+	width: calc(33.875% - 2px);
+}
+
+#properties-view h1, #properties-view h2 {
+	width: 100%;
+	text-align: center;
+}
+
+#properties-list {
+	position: relative;
+	width: 100%;
+}
+
+.property {
+	position: relative;
+	width: calc(100% - 10px);
+	height: 30px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-bottom: 5px;
+}
+
+.property span {
+	display: inline-block;
+	line-height: 30px;
+	text-align: center;
+	width: calc(50% - 5px);
+	padding: 0;
+	margin: 0;
+}
+
+.property input {
+	display: inline-block;
+	width: calc(50% - 5px);
+	height: 100%;
+	text-align: center;
+	margin: 0;
+	border: none;
+	padding: 0;
+	outline: none;
+	left: 0;
+	right: 0;
+}
+
+#connections-list {
+	position: relative;
+	width: 100%;
+}
+
+.connection_property, .instruction {
+	position: relative;
+	width: calc(100% - 10px);
+	height: 30px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-bottom: 5px;
+}
+
+.instruction {
+	width: calc(100% - 20px);
+	margin-left: 5px;
+	box-shadow: 0px 0px 0px 1px #D9C9BA inset;
+}
+
+.connection_property span {
+	display: inline-block;
+	line-height: 30px;
+	text-align: center;
+	width: calc(75% - 5px);
+	padding: 0;
+	margin: 0;
+	float: left;
+}
+
+.instruction span {
+	display: inline-block;
+	line-height: 30px;
+	text-align: left;
+	width: calc(80% - 20px);
+	padding: 0;
+	margin: 0;
+	margin-left:5px;
+	margin-right: 5px;
+}
+
+.instruction span input {
+	width: 110px;
+	text-align: center;
+	background: #D9C9BA;
+	height: 30px;
+	border: none;
+	outline: none;
+	font-family: 'Inconsolata', monospace;
+	font-size:16px;
+	padding:0;
+	margin:0;
+	color: #F2EAE4;
+}
+
+.instruction span input::placeholder {
+	color: #F2EAE4;
+}
+
+.instr_del, .instr_edit {
+	position: absolute;
+	right: 0px;
+	width: calc(10% - 5px);
+	height: 30px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	line-height: 30px;
+	top:0;
+	font-size:24px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.instr_edit {
+	right: calc(10% - 5px);
+	line-height: 27px;
+}
+
+.instr_del:hover, .instr_edit:hover {
+	background: #D9C9BA;
+}
+
+.instr_add {
+	position: relative;
+	left: 5px;
+	width: 20%;
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	box-shadow: 0px 0px 0px 1px #D9C9BA inset;
+	cursor: pointer;
+	transition: background 0.2s, width 0.2s;
+	color: #7B878C;
+}
+
+.instr_add:hover {
+	background: #D9C9BA;
+}
+
+.connection_del {
+	display: inline-block;
+	width: calc(25% - 5px);
+	height: 100%;
+	text-align: center;
+	margin: 0;
+	border: none;
+	padding: 0;
+	outline: none;
+	left: 0;
+	right: 0;
+	float: left;
+	line-height: 30px;
+}
+
+#inspect-view {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+	align-content: flex-start;
+	position: absolute;
+	top: 250px;
+	bottom: 30px;
+	right: 0;
+	width: 33.875%;
+	overflow: scroll;
+}
+
+#inspect-view-status {
+	position: absolute;
+	bottom: 0;
+	height: 30px;
+	width: calc(33.875% - 7px);
+	right: 0;
+}
+
+#modal {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background: rgba(0,0,0,0.7);
+	z-index: 1;
+	transition: opacity 0.2s;
+	opacity: 0;
+}
+
+#modal.show {
+	opacity: 1;
+}
+
+#modal-dialog {
+	position: relative;
+	width: 190px;
+	height: 290px;
+	margin-left: auto;
+	margin-right: auto;
+	background: #F25A38;
+	top: calc(50% - 150px);
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #333;
+	padding: 5px;
+	overflow: hidden;
+}
+
+#modal-dialog span {
+	display: block;
+	position: absolute;
+	width: 100%;
+	top: 0;
+	left: 0;
+	height: 30px;
+	line-height: 30px;
+	text-overflow: ellipsis;
+	text-align: center;
+	color: #F2EAE4;
+	background: #F69079;
+}
+
+#options {
+	position: absolute;
+	width: 100%;
+	bottom: 30px;
+	right: 0;
+	height: 240px;
+	overflow-y: scroll;
+}
+
+#modal-dialog .opt {
+	height: 30px;
+	width: 100%;
+	line-height: 30px;
+	text-align: center;
+	color: #F2EAE4;
+	cursor: pointer;
+	transition: background 0.2s, color 0.2s;
+}
+
+#modal-dialog .opt:hover {
+	background: #F2EAE4;
+	color: #F25A38;
+}
+
+#modal-dialog .cancel {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 30px;
+	color: #F2EAE4;
+	line-height: 30px;
+	cursor: pointer;
+	text-align: center;
+	transition: background 0.2s, color 0.2s;
+}
+
+#modal-dialog .cancel:hover {
+	background: #F2EAE4;
+	color: #F25A38;
+}
+
+#deletenode {
+	position: relative;
+	width: calc(100% - 10px);
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	left: 5px;
+	color: #7B878C;
+	transition: background 0.2s;
+	cursor: pointer;
+	box-shadow: 0px 0px 0px 1px #D9C9BA inset;
+	margin-top: 10px;
+}
+
+#deletenode:hover {
+	background: #D9C9BA;
+}
+
+
+#training-modal {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background: rgba(0,0,0,0.7);
+	z-index: 1;
+	transition: opacity 0.2s;
+	opacity: 0;
+}
+
+#training-modal.show {
+	opacity: 1;
+}
+
+#training-modal-dialog {
+	position: relative;
+	width: 190px;
+	height: 290px;
+	margin-left: auto;
+	margin-right: auto;
+	background: #F25A38;
+	top: calc(50% - 150px);
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #333;
+	padding: 5px;
+	overflow: hidden;
+}
+
+#training-modal-dialog span {
+	display: block;
+	position: absolute;
+	width: 100%;
+	top: 0;
+	left: 0;
+	height: 30px;
+	line-height: 30px;
+	text-overflow: ellipsis;
+	text-align: center;
+	color: #F2EAE4;
+	background: #F69079;
+}
+
+#training-options {
+	position: absolute;
+	width: 100%;
+	bottom: 30px;
+	right: 0;
+	height: 240px;
+	overflow-y: scroll;
+}
+
+#training-modal-dialog .training-opt {
+	height: 30px;
+	width: 100%;
+	line-height: 30px;
+	text-align: center;
+	color: #F2EAE4;
+	cursor: pointer;
+	transition: background 0.2s, color 0.2s;
+}
+
+#training-modal-dialog .training-opt input {
+	height: 30px;
+	width: 50%;
+	line-height: 30px;
+	text-align: center;
+	color: #F2EAE4;
+	background: none;
+	outline: none;
+	border: none;
+	margin: 0;
+	padding: 0;
+	transition: background 0.2s, color 0.2s;
+	font-size: 16px;
+	font-family: 'Inconsolata', monospace;
+	float: right;
+}
+
+#training-modal-dialog .training-opt input::placeholder {
+	color: #F69079;
+}
+
+#training-modal-dialog .training-opt.focused {
+	background: #F2EAE4;
+	color: #F25A38;
+}
+
+#training-modal-dialog .training-opt.focused > input {
+	color: #F25A38;
+}
+
+#training-modal-dialog .training-cancel {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 50%;
+	height: 30px;
+	color: #F2EAE4;
+	line-height: 30px;
+	cursor: pointer;
+	text-align: center;
+	transition: background 0.2s, color 0.2s;
+}
+
+#training-modal-dialog .training-cancel:hover {
+	background: #F2EAE4;
+	color: #F25A38;
+}
+
+#training-modal-dialog .training-confirm {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 50%;
+	height: 30px;
+	color: #F69079;
+	line-height: 30px;
+	text-align: center;
+	transition: background 0.2s, color 0.2s;
+}
+
+#training-modal-dialog .training-confirm.enabled {
+	cursor: pointer;
+	color: #F2EAE4;
+}
+
+#training-modal-dialog .training-confirm.enabled:hover {
+	background: #F2EAE4;
+	color: #F25A38;
+}
+
+.laydata {
+	width: 50px;
+	margin: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+}
+
+#run-modal {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background: rgba(0,0,0,0.7);
+	z-index: 1;
+	transition: opacity 0.2s;
+	opacity: 0;
+}
+
+#run-modal.show {
+	opacity: 1;
+}
+
+#run-modal-dialog {
+	position: relative;
+	width: 500px;
+	height: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	background: #F25A38;
+	top: calc(50% - 100px);
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #333;
+	padding: 5px;
+	overflow: hidden;
+}
+
+#run-modal-dialog span {
+	display: block;
+	position: absolute;
+	width: 100%;
+	top: 0;
+	left: 0;
+	height: 30px;
+	line-height: 30px;
+	text-overflow: ellipsis;
+	text-align: center;
+	color: #F2EAE4;
+	background: #F69079;
+}
+
+#run-options {
+	position: absolute;
+	width: 100%;
+	bottom: 30px;
+	right: 0;
+	height: calc(100% - 60px);
+	overflow-y: scroll;
+}
+
+#run-modal-dialog .run-cancel {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 50%;
+	height: 30px;
+	color: #F2EAE4;
+	line-height: 30px;
+	cursor: pointer;
+	text-align: center;
+	transition: background 0.2s, color 0.2s;
+}
+
+#run-modal-dialog .run-cancel:hover {
+	background: #F2EAE4;
+	color: #F25A38;
+}
+
+#run-modal-dialog .run-confirm {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 50%;
+	height: 30px;
+	color: #F2EAE4;
+	line-height: 30px;
+	text-align: center;
+	transition: background 0.2s, color 0.2s;
+	cursor: pointer;
+}
+
+#run-modal-dialog .run-confirm:hover {
+	background: #F2EAE4;
+	color: #F25A38;
+}
+
+#run-accuracy-output {
+	position: absolute;
+	width: 100%;
+	right: 0;
+	margin-right: 0;
+	height: calc(100% - 30px);
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+
+	padding-top: 15px;
+	padding-bottom: 15px;
+	overflow-y: scroll;
+}
+
+div #accuracy {
+	width: 90%;
+	font-size: 48px;
+	color: #F2EAE4;
+	text-align: center;
+}
+
+#run-accuracy-output input {
+	width: 90%;
+	font-size: 48px;
+	color: #F2EAE4;
+	text-align: center;
+	background: none;
+	border: none;
+	outline: none;
+	padding: 0;
+	margin: 0;
+	height: 50px;
+	font-family: 'Inconsolata', monospace;
+}
+
+#run-accuracy-output input::placeholder {
+	color: #F69079;
+	font-size: 20px;
+}

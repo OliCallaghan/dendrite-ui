@@ -1,0 +1,33 @@
+.node {
+	position: relative;
+	width: 100px;
+	height: 50px;
+	background: #F69079;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 30px;
+	text-align: center;
+	line-height: 50px;
+	color: #fff;
+	transition: width 0.2s, border-radius 0.2s;
+	cursor: pointer;
+}
+
+.learnable {
+	border-radius: 25px;
+	width: 125px;
+}
+
+.activation {
+	width: 60px;
+}
+
+.op {
+	width: 60px;
+}
+
+.data {
+	box-shadow: 0px 0px 0px 1px #F69079 inset;
+	background: #F2EAE4;
+	color: #F69079;
+}

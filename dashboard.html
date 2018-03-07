@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dendrite</title>
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+	<link rel="stylesheet" href="./styles/layout.css" />
+	<link rel="stylesheet" href="./styles/style.css" />
+	<link rel="stylesheet" href="./styles/graph.css" />
+</head>
+<body>
+	<div id="sidebar-toolbar">
+		<div id="sidebar-filename-container">
+			<div id="sidebar-filename">unsaved network</div>
+		</div>
+		<div id="new" class="action">NEW</div>
+		<div id="save" class="action">SAVE</div>
+		<div id="open" class="action">OPEN</div>
+	</div>
+	<div id="graph">
+		<canvas width="400px" height="2000px" id="connections"></canvas>
+		<!--
+			<div id="new" class="node data">INPUT</div>
+			<div class="node learnable">FC</div>
+			<div class="node activation">LOG</div>
+			<div class="node learnable">FC</div>
+			<div class="node activation">LOG</div>
+			<div class="node data">LOSS</div>
+		-->
+	</div>
+	<div id="graph-toolbar">
+		<div id="addnode" class="action">ADD NODE</div>
+		<div id="connectnodes" class="action">CONNECT NODES</div>
+	</div>
+	<div id="loss-graph">
+		<canvas id="loss-graph-canvas" width="400" height="220"></canvas>
+	</div>
+	<div id="actionbar">
+		<div id="train" class="action">TRAIN</div>
+		<div id="run" class="action">RUN</div>
+	</div>
+	<div id="properties-view">
+		<h1>Select Layer</h1>
+		<div id="properties-list">
+			<!--
+			<div class="property">
+				<span>Property Name</span>
+				<input placeholder="VAL" />
+			</div>
+			<div class="property">
+				<span>Property Name</span>
+				<input placeholder="VAL" />
+			</div>
+			<div class="property">
+				<span>Property Name</span>
+				<input placeholder="VAL" />
+			</div>
+			<div class="property">
+				<span>Property Name</span>
+				<input placeholder="VAL" />
+			</div>
+			<div class="property">
+				<span>Property Name</span>
+				<input placeholder="VAL" />
+			</div>-->
+		</div>
+		<div id="deletenode">Delete Layer</div>
+		<h2 class="instr">Instructions</h2>
+		<div class="instr" t="IN" id="instructions-list">
+			<!--
+			<div class="instruction" instr="read" connection="Y">
+				<span>READ <input placeholder="bytes"/> AS <input placeholder="datatype"/></span>
+				<div class="instr_edit">&equiv;</div>
+				<div class="instr_del">&times;</div>
+			</div>
+			<div class="instruction" instr="read" connection="Y">
+				<span>DIV <input placeholder="scalar"/></span>
+				<div class="instr_edit">&equiv;</div>
+				<div class="instr_del">&times;</div>
+			</div>
+			<div class="instruction" instr="read" connection="Y">
+				<span>ADD <input placeholder="scalar"/></span>
+				<div class="instr_edit">&equiv;</div>
+				<div class="instr_del">&times;</div>
+			</div>-->
+		</div>
+		<div class="instr_add emptylist" instr-set="IN">ADD</div>
+		<div class="instr" t="OUT" id="instructions-list">
+			<!--
+			<div class="instruction" instr="read" connection="Y">
+				<span>READ <input placeholder="bytes"/> AS <input placeholder="datatype"/></span>
+				<div class="instr_edit">&equiv;</div>
+				<div class="instr_del">&times;</div>
+			</div>
+			<div class="instruction" instr="read" connection="Y">
+				<span>DIV <input placeholder="scalar"/></span>
+				<div class="instr_edit">&equiv;</div>
+				<div class="instr_del">&times;</div>
+			</div>
+			<div class="instruction" instr="read" connection="Y">
+				<span>ADD <input placeholder="scalar"/></span>
+				<div class="instr_edit">&equiv;</div>
+				<div class="instr_del">&times;</div>
+			</div>-->
+		</div>
+		<div class="instr_add emptylist" instr-set="OUT">ADD</div>
+		<h2 class="connection_title">Connections</h2>
+		<div id="connections-list">
+			<!--
+			<div class="connection_property" node="X" connection="Y">
+				<span>Connection to [where connection Y goes]</span>
+				<div class="connection_del">&times;</div>
+			</div>
+			<div class="connection_property" node="X" connection="Y">
+				<span>Connection to [where connection Y goes]</span>
+				<div class="connection_del">&times;</div>
+			</div>
+			<div class="connection_property" node="X" connection="Y">
+				<span>Connection to [where connection Y goes]</span>
+				<div class="connection_del">&times;</div>
+			</div>
+			<div class="connection_property" node="X" connection="Y">
+				<span>Connection to [where connection Y goes]</span>
+				<div class="connection_del">&times;</div>
+			</div>-->
+		</div>
+	</div>
+	<div id="modal">
+		<div id="modal-dialog">
+			<span>Select Layer Type</span>
+			<div id="options">
+				<div class="opt">FC</div>
+				<div class="opt">LOG</div>
+				<div class="opt">...</div>
+				<div class="opt">Opt4</div>
+				<div class="opt">Opt5</div>
+				<div class="opt">Opt6</div>
+				<div class="opt">Opt7</div>
+				<div class="opt">Opt8</div>
+				<div class="opt">Opt9</div>
+				<div class="opt">Opt10</div>
+				<div class="opt">Opt11</div>
+			</div>
+			<div class="cancel">Cancel</div>
+		</div>
+	</div>
+	<div id="training-modal">
+		<div id="training-modal-dialog">
+			<span>Training parameters</span>
+			<div id="training-options">
+				<div class="training-opt"><input id="" placeholder="ETA"></div>
+				<div class="training-opt">ETA_DECAY</div>
+				<div class="training-opt">IT_DECAY</div>
+				<div class="training-opt"></div>
+				<div class="training-opt">Opt5</div>
+				<div class="training-opt">Opt6</div>
+				<div class="training-opt">Opt7</div>
+				<div class="training-opt">Opt8</div>
+				<div class="training-opt">Opt9</div>
+				<div class="training-opt">Opt10</div>
+				<div class="training-opt">Opt11</div>
+			</div>
+			<div class="training-cancel">Cancel</div>
+			<div class="training-confirm">Train</div>
+		</div>
+	</div>
+	<div id="run-modal">
+		<div id="run-modal-dialog">
+			<span>Run Network</span>
+			<div id="run-options">
+				<div id="run-accuracy-output">
+					<input id="threshold-inp" placeholder="THRESHOLD (0.1)" />
+					<input id="iterations-inp" placeholder="ITERATIONS (1000)" />
+					<div id="accuracy">Calculating...</div>
+				</div>
+			</div>
+			<div class="run-cancel">Cancel</div>
+			<div class="run-confirm">Calculate Accuracy</div>
+		</div>
+	</div>
+	<div id="inspect-view"></div>
+	<div id="inspect-view-status">lpX.dat</div>
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.6.1/Sortable.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+	<script src="./scripts/graph/graph.js"></script>
+	<script src="./scripts/loss-graph.js"></script>
+	<script src="./scripts/train.js"></script>
+	<script src="./scripts/file.js"></script>
+	<script>if (window.module) module = window.module;</script>
+</body>
+</html>
