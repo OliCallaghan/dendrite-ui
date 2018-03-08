@@ -121,6 +121,7 @@ function IsValidProperty(t, property, val) {
 //
 function GetDims(index) {
 	t_process.stdin.write(`DIMS${index}\n`);
+	//alert(`DIMS${index}\n`);
 }
 
 //
@@ -128,6 +129,7 @@ function GetDims(index) {
 //
 function GetData(index) {
 	t_process.stdin.write(`DATA${index}\n`);
+	$("#inspect-view-status-filename").text(`${nodes[index].t}_${index} `);
 }
 
 //
@@ -142,6 +144,42 @@ function Pause() {
 //
 function Resume() {
 	if (t_process_alive) t_process.stdin.write(`RESUME\n`);
+}
+
+//
+// GetLayerPropertiesToCheck(LAYER TYPE) : Gets properties of layer type
+//
+function GetLayerPropertiesToCheck(type) {
+	switch (type) {
+		case "FC":
+			return FC_PROPERTIES;
+			break;
+		case "BIAS":
+			return BIAS_PROPERTIES;
+			break;
+		case "IN":
+			return IN_PROPERTIES;
+			break;
+		case "LOSS":
+			return LOSS_PROPERTIES;
+			break;
+		default:
+			throw "Unsupported layer";
+			break;
+	}
+}
+
+//
+// DoesNodeContainProperty(PROPERTY, NODE PROPERTY, CONSTRAINT) : Checks whether specific property has been set in the graph structure
+//
+function DoesNodeContainProperty(property, node_property, constraint) {
+	if (node_property == undefined) {
+		return false;
+	} else if ((constraint == "number") && (isNaN(parseFloat(node_property)))) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 //
@@ -167,15 +205,17 @@ function verifyValidNetwork(order) {
 	// Verifiy hyperparameters
 	for (node in nodes) {
 		// IMPORTANT RETURN
-		// Rewrite as this could bug
-		Object.keys(nodes[node]).forEach(function (key) {
-			const valid = IsValidProperty(nodes[node].t, key, nodes[node][key]);
+		let should_fail = false;
+		Object.keys(GetLayerPropertiesToCheck(nodes[node].t)).forEach(function (key) {
+			const valid = DoesNodeContainProperty(key, nodes[node][key], GetLayerPropertiesToCheck(nodes[node].t)[key]);
 			if (!valid) {
-				alert("");
-				console.log("Property " + key + " is invalid");
-				return false;
+				should_fail = true;
 			}
 		});
+
+		if (should_fail) {
+			return false;
+		}
 	}
 
 	// Network is valid
@@ -325,10 +365,7 @@ function packageToNetworkSave() {
 	}
 
 	// Get data to write to model.struct
-	//
 	let model_arr = [];
-	console.log(order);
-	debugger;
 	for (node in order) {
 		model_arr.push(PackageAsString(node, nodes[order[node]], order.length - 2 == node, order));
 	}
@@ -408,7 +445,7 @@ function Train() {
 	// Possible outputs from DENDRITE training
 	const LOSS_RGX = /ITERATION ([0-9]+): ([0-9]+.[0-9]+)/g
 	const DATA_RGX = /DATA: \[([0-9.-\s]+)\]/g
-	const DIMS_RGX = /DIMS: \[([0-9.-\s]+)\]/g
+	const DIMS_RGX = /DIMS: (\[[0-9.-\s]+\])/g
 
 	// Clear the loss graph
 	ClearLoss();
@@ -422,6 +459,7 @@ function Train() {
 			let loss = LOSS_RGX.exec(str);
 			let data = DATA_RGX.exec(str);
 			let dims = DIMS_RGX.exec(str);
+			console.log(str);
 			if (loss != null) {
 				// Graph the loss
 				AddLossValuePoint(parseFloat(loss[2]), parseInt(loss[1]));
@@ -429,7 +467,8 @@ function Train() {
 				// Write the layer output to the layer inspect pane
 				InitLayerDataViewData(data[1]);
 			} else if (dims != null) {
-				// IMPORTANT RETURN
+				$("#inspect-view-status-dims").text(dims[1]);
+				GetData(get_data_from_node);
 			}
 		})
 	})
@@ -524,7 +563,9 @@ $("#train").click(function () {
 					file_location = path
 					// Save network
 					CreateNetworkFolderLocation(file_location);
-					packageToNetworkSave();
+					if (!packageToNetworkSave()) {
+						alert("Invalid graph to train");
+					}
 				}
 			});
 		} else {

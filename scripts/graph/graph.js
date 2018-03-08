@@ -5,6 +5,7 @@ var nodes = []; // Stores nodes, their properties and connections
 var mode = "SELECT"; // Current graph view mode
 var selected_node = undefined; // Node which has been selected in connecting nodes together
 var properties_node = undefined; // Node currently displaying properties
+var get_data_from_node = undefined;
 
 var InInstrSortable, LossInstrSortable, NodesSortable; // References to drag and drop containers
 
@@ -294,12 +295,14 @@ function InitProperties(obj, index) {
 $("#connectnodes").click(function () {
 	if (mode == "SELECT") {
 		// Change to CONNECT
-		// IMPORTANT RETURN
-		// Freeze draggable
+		// Lock arrangement of nodes whilst connections are created
+		NodesSortableLock(true);
 		$(this).text("FINISHED");
 		mode = "CONNECT";
 	} else if (mode == "CONNECT") {
 		// Change to SELECT
+		// Unlock arrangement of nodes
+		NodesSortableLock(false);
 		$(this).text("CONNECT NODES");
 		mode = "SELECT";
 		selected_node = undefined;
@@ -341,9 +344,9 @@ function AddNodeHandlers() {
 			// If training, then get the current output data and display in pane
 			if (t_process_alive) {
 				let exec_node = exec_order[properties_node];
+				get_data_from_node = exec_node;
 				// IMPORTANT RETURN
 				GetDims(exec_node);
-				GetData(exec_node);
 			}
 		}
 	});
@@ -560,6 +563,7 @@ $(document).ready(function () {
 
 	ClosePropertiesPane();
 	CloseAllModals()
+	SetButtonHandlers();
 	AddNodeHandlers();
 	SetInstructionHandlers();
 	SetNodeHandlers();
