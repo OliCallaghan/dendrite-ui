@@ -9,16 +9,11 @@ var TRAINING_P = { ETA: undefined, ETA_DECAY: undefined, IT_DECAY: undefined, IT
 var RUN_P = { INPUT: undefined, CALC_ACCURACY: false };
 
 // Execution mode
-// IMPORTANT RETURN
-var mode_exec = "STOP";
-var training = false;
+var isExec = false; // Possible values are: [ false, "training", "accuracy" ]
+var t_process;
+var run_process;
 
 var file_location = undefined;
-var t_process;
-var t_process_alive = false;
-
-var run_process;
-var run_process_alive;
 
 //
 // ReturnNetworkExecutionOrder() : Returns the order which layers must be executed in
@@ -136,14 +131,14 @@ function GetData(index) {
 // Pause() : Pauses training of model
 //
 function Pause() {
-	if (t_process_alive) t_process.stdin.write(`PAUSE\n`);
+	if (isExec == "training") t_process.stdin.write(`PAUSE\n`);
 }
 
 //
 // Resume() : Resumes training of model
 //
 function Resume() {
-	if (t_process_alive) t_process.stdin.write(`RESUME\n`);
+	if (isExec == "training") t_process.stdin.write(`RESUME\n`);
 }
 
 //
@@ -164,7 +159,8 @@ function GetLayerPropertiesToCheck(type) {
 			return LOSS_PROPERTIES;
 			break;
 		default:
-			throw "Unsupported layer";
+			console.log("no properties to check");
+			return [];
 			break;
 	}
 }
@@ -430,9 +426,9 @@ function Train() {
 	HideTrainingModal();
 
 	// Sets execution mode and app variables
-	mode_exec = "TRAIN";
-	training = true;
-	t_process_alive = true;
+	// RETURN
+	isExec = "training";
+	$("#train").text(GetTrainButtonText());
 
 	// Disable node sorting while training
 	NodesSortableLock(true);
@@ -479,13 +475,13 @@ function Train() {
 		alert(data.toString());
 	})
 
-	// DENDRITE training ends handler
-	t_process.on('close', function (code) {
+	// DENDRITE training exits handler
+	t_process.on('close', function (code, sig) {
 		// Returns app to original state before training
-		t_process_alive = false;
-		mode_exec = "STOP";
-		training = false;
-		$("#train").text("TRAIN");
+		isExec = false;
+
+		// IMPORTANT RETURN
+		$("#train").text(GetTrainButtonText());
 		t_process.removeAllListeners('close');
 		NodesSortableLock(false);
 	});
@@ -546,12 +542,30 @@ function GetTrainingParams() {
 }
 
 //
+// GetTrainButtonText() : Returns the new text for the train button according to execution
+//
+function GetTrainButtonText() {
+	switch (isExec) {
+		case false:
+			return "TRAIN";
+			break;
+		case "training":
+			return "STOP";
+			break;
+		case "accuracy":
+			return "TRAIN";
+			break;
+		default:
+			return "INVALID EXEC MODE";
+	}
+}
+
+//
 // EVENT: #train (CLICK)
 // Prompts user to save the network before displaying training modal in preparation for training
 $("#train").click(function () {
 	// Re-assign button text
-	$(this).text(mode_exec);
-	if (training == false) {
+	if (isExec == false) {
 		// Training is not in process
 		if (file_location == undefined) {
 			// Prompt user to save their network
@@ -635,6 +649,7 @@ function CheckNetworkSaveExists() {
 //
 $(".run-cancel").click(function() {
 	$("#run-modal").removeClass("show");
+	run_process.kill();
 	setTimeout(function () {
 		$("#run-modal").hide();
 	}, 200);
@@ -644,7 +659,7 @@ $(".run-cancel").click(function() {
 // RunAccuracy() : Tests accuracy of the network given a threshold and number of iterations
 //
 function RunAccuracy() {
-	if (t_process_alive) {
+	if (isExec == "training") {
 		// Check if training
 		alert("Stop training first");
 	} else {
@@ -662,7 +677,7 @@ function RunAccuracy() {
 		}
 
 		// Specify that the accuracy testing process is running
-		run_process_alive = true;
+		isExec = "accuracy";
 		// Start the accuracy testing process
 		run_process = spawn(path.join(__dirname, "executables", "dendrite"), ["run", file_location + "/", parseInt(iterations), parseFloat(threshold)]);
 
@@ -685,7 +700,7 @@ function RunAccuracy() {
 		// ACCURACY TESTING finishes
 		run_process.on('exit', (code, signal) => {
 			// Return app state to before accuracy testing
-			run_process_alive = false;
+			isExec = false;
 			$(".run-cancel").text("Back");
 		})
 	}

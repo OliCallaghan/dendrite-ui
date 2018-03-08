@@ -93,6 +93,7 @@ function PopulateGraph() {
 // Open(LOCATION) : Open the network given the file path
 //
 function Open(location) {
+	Save();
 	// Clear the graph
 	$(".node").remove()
 

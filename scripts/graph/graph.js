@@ -342,7 +342,7 @@ function AddNodeHandlers() {
 			InitProperties(this, properties_node);
 
 			// If training, then get the current output data and display in pane
-			if (t_process_alive) {
+			if (isExec) {
 				let exec_node = exec_order[properties_node];
 				get_data_from_node = exec_node;
 				// IMPORTANT RETURN
